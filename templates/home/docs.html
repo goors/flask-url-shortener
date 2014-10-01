@@ -1,0 +1,91 @@
+{% extends "layout.html" %}
+{% block body %}
+
+    <div class="sixteen columns">
+    <h2>Make short url</h2>
+        <p>In order to make short url send long url with PUT request to http://goo.rs. Form filed name is <b>url</b>.</p>
+        <pre>
+            <code data-language="javascript">
+    var xhr = new XMLHttpRequest;
+    xhr.open("PUT", "http://goo.rs", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            var json = JSON.parse(xhr.responseText);
+            document.getElementById("short-url").textContent = json.response;
+        }
+    };
+    var contentType = "multipart/form-data; boundary=----WebKitFormBoundary2CKH4r5KWjDsz3Bp";
+    xhr.setRequestHeader("Content-Type", contentType);
+
+    xhr.send('------WebKitFormBoundary2CKH4r5KWjDsz3Bp ' +
+    '\n' +
+    'Content-Disposition: form-data; name="url" ' +
+    '\n' +
+    '\n' +
+    'http://google.com' +
+    '\n' +
+    '------WebKitFormBoundary2CKH4r5KWjDsz3Bp--');
+    document.getElementById("short-url").textContent = "Loading ...";
+            </code>
+        </pre>
+
+    <p>Response code.</p>
+        <pre>
+            <code data-language="javascript">
+  {
+    "message": "Url created",
+    "response": "http://goo.rs/9jyfd",
+    "status": 1
+  }
+            </code>
+        </pre>
+<h2>Get url stats</h2>
+
+    <p>In order to make short url send long url with POST request to http://goo.rs. Form filed name is <b>url</b>.</p>
+        <p>You have to send full url for example: http://goo.rs/jegsp.</p>
+        <pre>
+            <code data-language="javascript">
+    var xhr = new XMLHttpRequest;
+    xhr.open("POST", "http://goo.rs", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            var json = JSON.parse(xhr.responseText);
+            console.log(json)
+        }
+    };
+    var contentType = "multipart/form-data; boundary=----WebKitFormBoundary2CKH4r5KWjDsz3Bp";
+    xhr.setRequestHeader("Content-Type", contentType);
+
+    xhr.send('------WebKitFormBoundary2CKH4r5KWjDsz3Bp ' +
+    '\n' +
+    'Content-Disposition: form-data; name="url" ' +
+    '\n' +
+    '\n' +
+    'http://goo.rs/jegsp' +
+    '\n' +
+    '------WebKitFormBoundary2CKH4r5KWjDsz3Bp--');
+
+            </code>
+        </pre>
+
+    <p>Response code.</p>
+        <pre>
+            <code data-language="javascript">
+  {
+    "message": "Clicks on link http://goo.rs/jegsp",
+    "response": 0,
+    "status": 1
+  }
+            </code>
+        </pre>
+    </div>
+
+
+
+    {% block js %}
+        <script src="static/js/rainbow-custom.min.js" type="text/javascript"></script>
+    {% endblock %}
+
+
+
+{% endblock %}

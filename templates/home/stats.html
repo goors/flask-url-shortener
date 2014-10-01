@@ -1,0 +1,63 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="four columns">
+
+        <ul class="sidebar">
+            <h2>Methods</h2>
+            <li><a href="/docs">Make short url</a></li>
+            <li><a href="/docs/stats">Get link stats</a></li>
+        </ul>
+
+    </div>
+
+    <div class="twelve columns">
+
+        <p>In order to make short url send long url with POST request to http://goo.rs. Form filed name is <b>url</b>.</p>
+        <p>You have to send full url for example: http://goo.rs/jegsp.</p>
+        <pre>
+            <code data-language="javascript">
+    var xhr = new XMLHttpRequest;
+    xhr.open("POST", "http://goo.rs", true);
+    xhr.onreadystatechange = function () {
+        if (xhr.readyState === 4) {
+            var json = JSON.parse(xhr.responseText);
+            console.log(json)
+        }
+    };
+    var contentType = "multipart/form-data; boundary=----WebKitFormBoundary2CKH4r5KWjDsz3Bp";
+    xhr.setRequestHeader("Content-Type", contentType);
+
+    xhr.send('------WebKitFormBoundary2CKH4r5KWjDsz3Bp ' +
+    '\n' +
+    'Content-Disposition: form-data; name="url" ' +
+    '\n' +
+    '\n' +
+    '' + longUrl + '' +
+    '\n' +
+    '------WebKitFormBoundary2CKH4r5KWjDsz3Bp--');
+
+            </code>
+        </pre>
+
+    <p>Response code.</p>
+        <pre>
+            <code data-language="javascript">
+  {
+    "message": "Clicks on link http://goo.rs/jegsp",
+    "response": 0,
+    "status": 1
+  }
+            </code>
+        </pre>
+
+    </div>
+
+
+
+    {% block js %}
+        <script src="static/js/rainbow-custom.min.js" type="text/javascript"></script>
+    {% endblock %}
+
+
+
+{% endblock %}

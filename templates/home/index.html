@@ -1,0 +1,66 @@
+{% extends "layout.html" %}
+{% block body %}
+    <div class="sixteen columns">
+        <label>Enter long url</label>
+        <input type="text" id="longUrl" onKeyPress="return checkSubmit(event)" />
+        <a href="javascript: makeShortUrl();" class="button button-orange button_sliding_bg" >
+            Make short url
+        </a>
+
+        
+
+    </div>
+    <div class="sixteen columns">
+        <div class="top">
+            <span id="short-url">http://goo.rs/...</span>
+        </div>
+    </div>
+
+    {% block js %}
+        <script>
+
+            function makeShortUrl(){
+
+                var longUrl = document.getElementById("longUrl").value;
+                if(longUrl !="") {
+                    var xhr = new XMLHttpRequest;
+
+                    xhr.open("PUT", "http://goo.rs", true);
+                    xhr.onreadystatechange = function () {
+                        if (xhr.readyState === 4) {
+                            var json = JSON.parse(xhr.responseText);
+                            document.getElementById("short-url").textContent = json.response;
+                        }
+                    };
+                    var contentType = "multipart/form-data; boundary=----WebKitFormBoundary2CKH4r5KWjDsz3Bp";
+                    xhr.setRequestHeader("Content-Type", contentType);
+
+                    xhr.send('------WebKitFormBoundary2CKH4r5KWjDsz3Bp ' +
+                            '\n' +
+                            'Content-Disposition: form-data; name="url" ' +
+                            '\n' +
+                            '\n' +
+                            '' + longUrl + '' +
+                            '\n' +
+                            '------WebKitFormBoundary2CKH4r5KWjDsz3Bp--');
+
+                    document.getElementById("short-url").textContent = "Loading ...";
+                }
+                else{
+                    document.getElementById("short-url").textContent = "Long url can not be empty ...";
+                }
+
+            }
+
+             function checkSubmit(e){
+               if(e && e.keyCode == 13){
+                  makeShortUrl();
+               }
+            }
+
+
+
+        </script>
+    {% endblock %}
+
+{% endblock %}

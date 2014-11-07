@@ -6,6 +6,11 @@ import time
 
 class model:
 
+    def is_safe(key, url):
+        response = requests.get(URL.format(key=key, url=url))
+
+        return response.text != 'malware'
+    
     def get_url_stats(self, short_url):
 
         db = DB()
@@ -25,29 +30,37 @@ class model:
 
 
     def make_short_url(self, url):
+    
+        import requests
 
-        db = DB()
+        key = 'AIzaSyBwCHhPcVAdwZJH-hlTU4WM_sHe8-_SGYU'
+        URL = 'https://sb-ssl.google.com/safebrowsing/api/lookup?client=Safe&key={key}&appver=1.5.2&pver=3.1&url={url}'
 
-        sql = '''SELECT id, short_url FROM links WHERE long_url=%s'''
-        query = db.query(sql, (url, ))
 
-        link = query.fetchone()
+        if(is_safe(key, url))
 
-        if link is not None:
-            db.close()
-            return self.format_result("http://goo.rs/"+link['short_url'], 1, "Links already exists")
+            db = DB()
 
-        else:
+            sql = '''SELECT id, short_url FROM links WHERE long_url=%s'''
+            query = db.query(sql, (url, ))
 
-            sql = '''SELECT MAX(id) as id FROM links'''
-            query = db.query(sql)
-            id = query.fetchone()
-            if id is not None:
-                short_url = encode_url(id['id'])
+            link = query.fetchone()
+
+            if link is not None:
+                db.close()
+                return self.format_result("http://goo.rs/"+link['short_url'], 1, "Links already exists")
+
             else:
-                short_url = encode_url(1)
-            sql = '''INSERT INTO links(id, long_url, short_url, clicks , u_id, created) VALUES (NULL, %s, %s, %s ,%s, %s )'''
-            db.query(sql, (url, short_url, 0, 2, time.strftime('%Y-%m-%d %H:%M:%S') ))
+
+                sql = '''SELECT MAX(id) as id FROM links'''
+                query = db.query(sql)
+                id = query.fetchone()
+                if id is not None:
+                    short_url = encode_url(id['id'])
+                else:
+                    short_url = encode_url(1)
+                sql = '''INSERT INTO links(id, long_url, short_url, clicks , u_id, created) VALUES (NULL, %s, %s, %s ,%s, %s )'''
+                db.query(sql, (url, short_url, 0, 2, time.strftime('%Y-%m-%d %H:%M:%S') ))
 
             return self.format_result("http://goo.rs/"+short_url, 1, 'Url created')
 

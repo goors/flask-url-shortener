@@ -39,10 +39,12 @@
                             var json = JSON.parse(xhr.responseText);
                             if(json.response.length === 0) {
                                 document.getElementById("short-url").textContent = "There was a problem with your url.";
-                                return;
+                                
 
                             }
-                            document.getElementById("short-url").textContent = json.response;
+                            else {
+                                document.getElementById("short-url").textContent = json.response;
+                            }
                         }
                     };
                     var contentType = "multipart/form-data; boundary=----WebKitFormBoundary2CKH4r5KWjDsz3Bp";

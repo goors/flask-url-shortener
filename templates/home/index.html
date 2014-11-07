@@ -37,7 +37,7 @@
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4) {
                             var json = JSON.parse(xhr.responseText);
-                            if(json.response)
+                            if(!isEmpty(json.response))
                                 document.getElementById("short-url").textContent = json.response;
                             else
                                 document.getElementById("short-url").textContent = "There was a problem with your url.";
@@ -67,6 +67,10 @@
                if(e && e.keyCode == 13){
                   makeShortUrl();
                }
+            }
+
+            function isEmpty(obj) {
+                return Object.keys(obj).length === 0;
             }
 
 

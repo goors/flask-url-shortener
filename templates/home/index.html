@@ -37,7 +37,10 @@
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4) {
                             var json = JSON.parse(xhr.responseText);
-                            document.getElementById("short-url").textContent = json.response;
+                            if(json.response)
+                                document.getElementById("short-url").textContent = json.response;
+                            else
+                                document.getElementById("short-url").textContent = "There was a problem with your url.";
                         }
                     };
                     var contentType = "multipart/form-data; boundary=----WebKitFormBoundary2CKH4r5KWjDsz3Bp";

@@ -37,12 +37,12 @@
                     xhr.onreadystatechange = function () {
                         if (xhr.readyState === 4) {
                             var json = JSON.parse(xhr.responseText);
-                            if(!isEmpty(json.response)) {
-                                document.getElementById("short-url").textContent = json.response;
-                            }
-                            else {
+                            if(Object.keys(json.response).length === 0) {
                                 document.getElementById("short-url").textContent = "There was a problem with your url.";
+                                return;
+
                             }
+                            document.getElementById("short-url").textContent = json.response;
                         }
                     };
                     var contentType = "multipart/form-data; boundary=----WebKitFormBoundary2CKH4r5KWjDsz3Bp";
@@ -57,7 +57,7 @@
                             '\n' +
                             '------WebKitFormBoundary2CKH4r5KWjDsz3Bp--');
 
-                    //document.getElementById("short-url").textContent = "Loading ...";
+                    document.getElementById("short-url").textContent = "Loading ...";
                 }
                 else{
                     document.getElementById("short-url").textContent = "Long url can not be empty ...";
@@ -71,9 +71,6 @@
                }
             }
 
-            function isEmpty(obj) {
-                return Object.keys(obj).length === 0;
-            }
 
 
 
